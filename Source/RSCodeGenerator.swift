@@ -31,18 +31,23 @@ public protocol RSCodeGenerator {
     
     /** Check whether the given contents are valid. */
     func isValid(_ contents:String) -> Bool
-    
+
     /** Generate code image using the given machine readable code object and correction level. */
-    func generateCode(_ machineReadableCodeObject:AVMetadataMachineReadableCodeObject, inputCorrectionLevel:InputCorrectionLevel, targetSize: CGSize?) -> RSCodeImage?
-    
-    /** Generate code image using the given machine readable code object. */
-    func generateCode(_ machineReadableCodeObject:AVMetadataMachineReadableCodeObject, targetSize: CGSize?) -> RSCodeImage?
-    
-    /** Generate code image using the given machine readable code object type, contents and correction level. */
-    func generateCode(_ contents:String, inputCorrectionLevel:InputCorrectionLevel, machineReadableCodeObjectType:String, targetSize: CGSize?) -> RSCodeImage?
-    
-    /** Generate code image using the given machine readable code object type and contents. */
-    func generateCode(_ contents:String, machineReadableCodeObjectType:String, targetSize: CGSize?) -> RSCodeImage?
+    func generateCode(_ contents: String, inputCorrectionLevel:InputCorrectionLevel, machineReadableCodeObjectType: String, ignoreValidation: Bool, targetSize: CGSize?) -> RSCodeImage?
+}
+
+extension RSCodeGenerator {
+    public func generateCode(_ contents: String, machineReadableCodeObjectType: String, targetSize: CGSize?) -> RSCodeImage? {
+        self.generateCode(contents, inputCorrectionLevel: .Medium, machineReadableCodeObjectType: machineReadableCodeObjectType, ignoreValidation: false, targetSize: targetSize)
+    }
+
+    public func generateCode(_ machineReadableCodeObject: AVMetadataMachineReadableCodeObject, targetSize: CGSize?) -> RSCodeImage? {
+        self.generateCode(machineReadableCodeObject.stringValue!, inputCorrectionLevel: .Medium, machineReadableCodeObjectType: machineReadableCodeObject.type.rawValue, ignoreValidation: false, targetSize: targetSize)
+    }
+
+    public func generateCode(_ machineReadableCodeObject: AVMetadataMachineReadableCodeObject, inputCorrectionLevel:InputCorrectionLevel, ignoreValidation: Bool, targetSize: CGSize?) -> RSCodeImage? {
+        self.generateCode(machineReadableCodeObject.stringValue!, inputCorrectionLevel: inputCorrectionLevel, machineReadableCodeObjectType: machineReadableCodeObject.type.rawValue, ignoreValidation: ignoreValidation, targetSize: targetSize)
+    }
 }
 
 // Check digit are not required for all code generators.
@@ -54,7 +59,7 @@ public protocol RSCheckDigitGenerator {
 
 // Abstract code generator, provides default functions for validations and generations.
 open class RSAbstractCodeGenerator : RSCodeGenerator {
-    
+
     open var fillColor: RSCodeColor = .white
     open var strokeColor: RSCodeColor = .black
     
@@ -135,26 +140,14 @@ open class RSAbstractCodeGenerator : RSCodeGenerator {
     }
     
     // RSCodeGenerator
-    
-    open func generateCode(_ machineReadableCodeObject:AVMetadataMachineReadableCodeObject, inputCorrectionLevel: InputCorrectionLevel, targetSize: CGSize? = nil) -> RSCodeImage? {
-        return self.generateCode(machineReadableCodeObject.stringValue!, inputCorrectionLevel: inputCorrectionLevel, machineReadableCodeObjectType: machineReadableCodeObject.type.rawValue, targetSize: targetSize)
-    }
-    
-    open func generateCode(_ machineReadableCodeObject:AVMetadataMachineReadableCodeObject, targetSize: CGSize? = nil) -> RSCodeImage? {
-        return self.generateCode(machineReadableCodeObject, inputCorrectionLevel: .Medium, targetSize: targetSize)
-    }
-    
-    open func generateCode(_ contents:String, inputCorrectionLevel:InputCorrectionLevel, machineReadableCodeObjectType:String, targetSize: CGSize? = nil) -> RSCodeImage? {
-        if self.isValid(contents) {
+
+    open func generateCode(_ contents:String, inputCorrectionLevel:InputCorrectionLevel, machineReadableCodeObjectType:String, ignoreValidation: Bool, targetSize: CGSize? = nil) -> RSCodeImage? {
+        if self.isValid(contents) || ignoreValidation {
             return self.drawCompleteBarcode(self.completeBarcode(self.barcode(contents)), targetSize: targetSize)
         }
         return nil
     }
-    
-    open func generateCode(_ contents:String, machineReadableCodeObjectType:String, targetSize: CGSize? = nil) -> RSCodeImage? {
-        return self.generateCode(contents, inputCorrectionLevel: .Medium, machineReadableCodeObjectType: machineReadableCodeObjectType, targetSize: targetSize)
-    }
-    
+
     // Class funcs
     
     // Get CIFilter name by machine readable code object type

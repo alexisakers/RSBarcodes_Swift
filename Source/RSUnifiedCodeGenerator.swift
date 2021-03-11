@@ -10,7 +10,7 @@ import Foundation
 import AVFoundation
 
 open class RSUnifiedCodeGenerator: RSCodeGenerator {
-    
+
     open var isBuiltInCode128GeneratorSelected = false
     open var fillColor: RSCodeColor = .white
     open var strokeColor: RSCodeColor = .black
@@ -26,7 +26,7 @@ open class RSUnifiedCodeGenerator: RSCodeGenerator {
         return false
     }
     
-    open func generateCode(_ contents: String, inputCorrectionLevel: InputCorrectionLevel, machineReadableCodeObjectType: String, targetSize: CGSize? = nil) -> RSCodeImage? {
+    open func generateCode(_ contents: String, inputCorrectionLevel: InputCorrectionLevel, machineReadableCodeObjectType: String, ignoreValidation: Bool, targetSize: CGSize? = nil) -> RSCodeImage? {
         var codeGenerator: RSCodeGenerator?
         switch machineReadableCodeObjectType {
         case AVMetadataObject.ObjectType.qr.rawValue, AVMetadataObject.ObjectType.pdf417.rawValue, AVMetadataObject.ObjectType.aztec.rawValue:
@@ -69,22 +69,10 @@ open class RSUnifiedCodeGenerator: RSCodeGenerator {
         if codeGenerator != nil {
             codeGenerator!.fillColor = self.fillColor
             codeGenerator!.strokeColor = self.strokeColor
-            return codeGenerator!.generateCode(contents, inputCorrectionLevel: inputCorrectionLevel, machineReadableCodeObjectType: machineReadableCodeObjectType, targetSize: targetSize)
+            return codeGenerator!.generateCode(contents, inputCorrectionLevel: inputCorrectionLevel, machineReadableCodeObjectType: machineReadableCodeObjectType, ignoreValidation: ignoreValidation, targetSize: targetSize)
         } else {
             return nil
         }
-    }
-    
-    open func generateCode(_ contents: String, machineReadableCodeObjectType: String, targetSize: CGSize? = nil) -> RSCodeImage? {
-        return self.generateCode(contents, inputCorrectionLevel: .Medium, machineReadableCodeObjectType: machineReadableCodeObjectType, targetSize: targetSize)
-    }
-    
-    open func generateCode(_ machineReadableCodeObject: AVMetadataMachineReadableCodeObject, inputCorrectionLevel: InputCorrectionLevel, targetSize: CGSize? = nil) -> RSCodeImage? {
-        return self.generateCode(machineReadableCodeObject.stringValue!, inputCorrectionLevel: inputCorrectionLevel, machineReadableCodeObjectType: machineReadableCodeObject.type.rawValue, targetSize: targetSize)
-    }
-    
-    open func generateCode(_ machineReadableCodeObject: AVMetadataMachineReadableCodeObject, targetSize: CGSize? = nil) -> RSCodeImage? {
-        return self.generateCode(machineReadableCodeObject, inputCorrectionLevel: .Medium, targetSize: targetSize)
     }
 }
 
