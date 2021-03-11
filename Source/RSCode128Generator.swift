@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 public enum RSCode128GeneratorCodeTable: Int {
     case auto = 0

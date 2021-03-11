@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 public let RSBarcodesTypeISBN13Code = "com.pdq.rsbarcodes.isbn13"
 public let RSBarcodesTypeISSN13Code = "com.pdq.rsbarcodes.issn13"

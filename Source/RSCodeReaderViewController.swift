@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
+#if os(iOS)
 import AVFoundation
 import UIKit
 
@@ -416,3 +417,5 @@ open class RSCodeReaderViewController: UIViewController, AVCaptureMetadataOutput
       }
    }
 }
+
+#endif

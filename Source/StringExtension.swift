@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 extension String {
     func length() -> Int {

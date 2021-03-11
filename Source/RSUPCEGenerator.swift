@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 // http://www.sly.com.tw/skill/know/new_page_6.htm
 // http://mdn.morovia.com/kb/UPCE-Specification-10634.html

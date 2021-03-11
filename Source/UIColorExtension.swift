@@ -6,20 +6,26 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
+#if os(macOS)
+import AppKit
+public typealias RSCodeColor = NSColor
+#elseif os(iOS)
 import UIKit
+public typealias RSCodeColor = RSCodeColor
+#endif
 
 /**
  MissingHashMarkAsPrefix:   "Invalid RGB string, missing '#' as prefix"
  UnableToScanHexValue:      "Scan hex error"
  MismatchedHexStringLength: "Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8"
  */
-public enum UIColorInputError : Error {
+public enum RSCodeColorInputError : Error {
     case missingHashMarkAsPrefix,
     unableToScanHexValue,
     mismatchedHexStringLength
 }
 
-extension UIColor {
+extension RSCodeColor {
     /**
      The shorthand three-digit hexadecimal representation of color.
      #RGB defines to the color #RRGGBB.
@@ -84,15 +90,14 @@ extension UIColor {
      */
     @objc public convenience init(rgba_throws rgba: String) throws {
         guard rgba.hasPrefix("#") else {
-            throw UIColorInputError.missingHashMarkAsPrefix
+            throw RSCodeColorInputError.missingHashMarkAsPrefix
         }
         
         let index = rgba.index(rgba.startIndex, offsetBy: 1)
         let hexString = String(rgba[index...])
-        var hexValue:  UInt32 = 0
-        
-        guard Scanner(string: hexString).scanHexInt32(&hexValue) else {
-            throw UIColorInputError.unableToScanHexValue
+
+        guard let hexValue = UInt32(hexString, radix: 16) else {
+            throw RSCodeColorInputError.unableToScanHexValue
         }
         
         switch (hexString.count) {
@@ -105,7 +110,7 @@ extension UIColor {
         case 8:
             self.init(hex8: hexValue)
         default:
-            throw UIColorInputError.mismatchedHexStringLength
+            throw RSCodeColorInputError.mismatchedHexStringLength
         }
     }
     
@@ -114,12 +119,12 @@ extension UIColor {
      
      - parameter rgba: String value.
      */
-    @objc public convenience init(_ rgba: String, defaultColor: UIColor = UIColor.clear) {
-        guard let color = try? UIColor(rgba_throws: rgba) else {
-            self.init(cgColor: defaultColor.cgColor)
+    @objc public convenience init(_ rgba: String, defaultColor: RSCodeColor = .clear) {
+        guard let color = try? RSCodeColor(rgba_throws: rgba) else {
+            self.init(copying: defaultColor)
             return
         }
-        self.init(cgColor: color.cgColor)
+        self.init(copying: color)
     }
     
     /**
@@ -139,5 +144,15 @@ extension UIColor {
         } else {
             return String(format: "#%02X%02X%02X", Int(r * 255), Int(g * 255), Int(b * 255))
         }
+    }
+
+    convenience init(copying color: RSCodeColor) {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        color.getRed(&r, green: &g, blue: &b, alpha: &a)
+
+        self.init(red: r, green: g, blue: b, alpha: a)
     }
 }

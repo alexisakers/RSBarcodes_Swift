@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 // http://www.barcodesymbols.com/code39.htm
 // http://www.barcodeisland.com/code39.phtml

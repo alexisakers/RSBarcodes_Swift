@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 public let RSBarcodesTypeExtendedCode39Code = "com.pdq.rsbarcodes.code39.ext"
 

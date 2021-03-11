@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
-import UIKit
 import QuartzCore
 
 open class RSFocusMarkLayer: CALayer {
@@ -15,7 +14,7 @@ open class RSFocusMarkLayer: CALayer {
     // Use camera.app's focus mark sight as default
     @objc open var sight: CGFloat = 6
     // Use camera.app's focus mark color as default
-    @objc open var strokeColor = UIColor("#ffcc00").cgColor
+    @objc open var strokeColor = RSCodeColor("#ffcc00").cgColor
     @objc open var strokeWidth: CGFloat = 1
     @objc open var delay: CFTimeInterval = 1
     @objc open var canDraw = false
@@ -44,7 +43,7 @@ open class RSFocusMarkLayer: CALayer {
         
         ctx.setShouldAntialias(true)
         ctx.setAllowsAntialiasing(true)
-        ctx.setFillColor(UIColor.clear.cgColor)
+        ctx.setFillColor(RSCodeColor.clear.cgColor)
         ctx.setStrokeColor(self.strokeColor)
         ctx.setLineWidth(self.strokeWidth)
         

@@ -6,7 +6,7 @@
 //  Copyright © 2019 P.D.Q. All rights reserved.
 //
 
-import UIKit
+import CoreImage
 
 final class ContextMaker {
     static func make() -> CIContext {

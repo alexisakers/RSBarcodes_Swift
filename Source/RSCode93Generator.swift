@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 P.D.Q. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 // http://www.barcodeisland.com/code93.phtml
 open class RSCode93Generator: RSAbstractCodeGenerator, RSCheckDigitGenerator {

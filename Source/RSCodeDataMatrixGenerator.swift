@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 P.D.Q. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class RSCodeDataMatrixGenerator: RSAbstractCodeGenerator {
 
