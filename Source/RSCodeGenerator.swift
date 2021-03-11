@@ -10,6 +10,10 @@ import Foundation
 import AVFoundation
 import CoreImage
 
+#if os(iOS)
+import UIKit
+#endif
+
 let DIGITS_STRING = "0123456789"
 
 // Controls the amount of additional data encoded in the output image to provide error correction.
@@ -33,20 +37,20 @@ public protocol RSCodeGenerator {
     func isValid(_ contents:String) -> Bool
 
     /** Generate code image using the given machine readable code object and correction level. */
-    func generateCode(_ contents: String, inputCorrectionLevel:InputCorrectionLevel, machineReadableCodeObjectType: String, ignoreValidation: Bool, targetSize: CGSize?) -> RSCodeImage?
+    func generateCode(_ contents: String, inputCorrectionLevel:InputCorrectionLevel, machineReadableCodeObjectType: String, targetSize: CGSize?) -> RSCodeImage?
 }
 
 extension RSCodeGenerator {
     public func generateCode(_ contents: String, machineReadableCodeObjectType: String, targetSize: CGSize?) -> RSCodeImage? {
-        self.generateCode(contents, inputCorrectionLevel: .Medium, machineReadableCodeObjectType: machineReadableCodeObjectType, ignoreValidation: false, targetSize: targetSize)
+        self.generateCode(contents, inputCorrectionLevel: .Medium, machineReadableCodeObjectType: machineReadableCodeObjectType, targetSize: targetSize)
     }
 
     public func generateCode(_ machineReadableCodeObject: AVMetadataMachineReadableCodeObject, targetSize: CGSize?) -> RSCodeImage? {
-        self.generateCode(machineReadableCodeObject.stringValue!, inputCorrectionLevel: .Medium, machineReadableCodeObjectType: machineReadableCodeObject.type.rawValue, ignoreValidation: false, targetSize: targetSize)
+        self.generateCode(machineReadableCodeObject.stringValue!, inputCorrectionLevel: .Medium, machineReadableCodeObjectType: machineReadableCodeObject.type.rawValue, targetSize: targetSize)
     }
 
     public func generateCode(_ machineReadableCodeObject: AVMetadataMachineReadableCodeObject, inputCorrectionLevel:InputCorrectionLevel, ignoreValidation: Bool, targetSize: CGSize?) -> RSCodeImage? {
-        self.generateCode(machineReadableCodeObject.stringValue!, inputCorrectionLevel: inputCorrectionLevel, machineReadableCodeObjectType: machineReadableCodeObject.type.rawValue, ignoreValidation: ignoreValidation, targetSize: targetSize)
+        self.generateCode(machineReadableCodeObject.stringValue!, inputCorrectionLevel: inputCorrectionLevel, machineReadableCodeObjectType: machineReadableCodeObject.type.rawValue, targetSize: targetSize)
     }
 }
 
@@ -141,8 +145,8 @@ open class RSAbstractCodeGenerator : RSCodeGenerator {
     
     // RSCodeGenerator
 
-    open func generateCode(_ contents:String, inputCorrectionLevel:InputCorrectionLevel, machineReadableCodeObjectType:String, ignoreValidation: Bool, targetSize: CGSize? = nil) -> RSCodeImage? {
-        if self.isValid(contents) || ignoreValidation {
+    open func generateCode(_ contents:String, inputCorrectionLevel:InputCorrectionLevel, machineReadableCodeObjectType:String, targetSize: CGSize? = nil) -> RSCodeImage? {
+        if self.isValid(contents) {
             return self.drawCompleteBarcode(self.completeBarcode(self.barcode(contents)), targetSize: targetSize)
         }
         return nil

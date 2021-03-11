@@ -11,7 +11,7 @@ import AppKit
 public typealias RSCodeColor = NSColor
 #elseif os(iOS)
 import UIKit
-public typealias RSCodeColor = RSCodeColor
+public typealias RSCodeColor = UIColor
 #endif
 
 /**

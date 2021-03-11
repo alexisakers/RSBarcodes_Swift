@@ -1,12 +1,26 @@
 //
-//  File 2.swift
-//  
-//
+//  ImageGenerator.swift
 //  Created by Alexis Akers on 3/11/21.
 //
 
 #if os(iOS)
 import UIKit
+class ImageGenerator {
+    let size: CGSize
+    init(size: CGSize) {
+        self.size = size
+    }
+
+    func image(builder: @escaping (CGContext) -> Void) -> RSCodeImage {
+        UIGraphicsBeginImageContextWithOptions(size, true, UIScreen.main.scale)
+        let context = UIGraphicsGetCurrentContext()!
+        builder(context)
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return image
+    }
+}
+
 #elseif os(macOS)
 import AppKit
 
